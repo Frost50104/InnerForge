@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Список тренировок</h3>
+<form class="row g-2 mb-3">
+  <div class="col-auto"><input class="form-control" type="text" name="q" value="{{ q }}" placeholder="Поиск по названию"></div>
+  <div class="col-auto"><button class="btn btn-outline-secondary">Искать</button></div>
+</form>
+<div class="row">
+  {% for w in workouts %}
+    <div class="col-12 col-md-6 col-lg-4 mb-3">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">{{ w.name }}</h5>
+          <div class="text-muted">Упражнений: {{ w.ex_count }}</div>
+        </div>
+        <div class="card-footer d-flex gap-2">
+          <a class="btn btn-primary" href="{% url 'workouts:select' w.id %}">Выбрать</a>
+          {% if user.is_staff %}
+            <a class="btn btn-outline-secondary" href="{% url 'workouts:edit' w.id %}">Редактировать</a>
+            <a class="btn btn-outline-danger" href="{% url 'workouts:archive' w.id %}">Архивировать</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div class="text-muted">Нет активных тренировок</div>
+  {% endfor %}
+</div>
+{% endblock %}

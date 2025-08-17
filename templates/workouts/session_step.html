@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="mb-3">{{ current.exercise.title }}</h1>
+{% if current.exercise.image %}
+  <img src="{{ current.exercise.image.url }}" alt="" class="img-fluid mb-3" style="max-height: 360px; object-fit: cover;">
+{% endif %}
+<div class="mb-3">
+  <h5>Как выполнять</h5>
+  <p>{{ current.exercise.how_to|linebreaks }}</p>
+</div>
+<div class="display-6 mb-3">Повторения: {{ current.exercise.reps }}</div>
+<a class="btn btn-primary" href="{% url 'workouts:session_next' session.id %}">{% if is_last %}Завершить{% else %}Перейти к следующему{% endif %}</a>
+{% endblock %}

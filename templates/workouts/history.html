@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load duration %}
+{% block content %}
+<h3>История тренировок</h3>
+<form class="row g-2 mb-3">
+  <div class="col-auto"><input type="date" class="form-control" name="start" value="{{ start }}"></div>
+  <div class="col-auto"><input type="date" class="form-control" name="end" value="{{ end }}"></div>
+  <div class="col-auto"><button class="btn btn-outline-secondary">Фильтровать</button></div>
+</form>
+<table class="table table-striped">
+  <thead>
+    <tr><th>Дата</th><th>Тренировка</th><th>Время</th></tr>
+  </thead>
+  <tbody>
+  {% for i in items %}
+    <tr>
+      <td>{{ i.performed_at|date:'d.m.Y H:i' }}</td>
+      <td>{{ i.workout.name }}</td>
+      <td>{{ i.duration_seconds|mmss }}</td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="3" class="text-muted">Пока нет записей</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

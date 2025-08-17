@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>{% if workout %}Редактирование тренировки{% else %}Новая тренировка{% endif %}</h3>
+  {% if workout %}<a href="{% url 'workouts:exercise_add' workout.id %}" class="btn btn-success">Добавить упражнение</a>{% endif %}
+</div>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button class="btn btn-primary" type="submit">Сохранить тренировку</button>
+</form>
+
+{% if workout %}
+  <hr>
+  <h5>Упражнения</h5>
+  <ul class="list-group">
+    {% for we in exercises %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <strong>#{{ we.position }}</strong> — {{ we.exercise.title }} ({{ we.exercise.reps }} повтор.)
+        </div>
+        <div>
+          <a class="btn btn-sm btn-outline-danger" href="{% url 'workouts:exercise_delete' workout.id we.id %}">Удалить</a>
+        </div>
+      </li>
+    {% empty %}
+      <li class="list-group-item text-muted">Пока нет упражнений</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+{% endblock %}
