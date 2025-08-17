@@ -186,7 +186,7 @@ def is_admin(user):
     return user.is_authenticated and user.is_staff
 
 
-@user_passes_test(is_admin)
+@login_required
 @transaction.atomic
 def workout_create(request: HttpRequest):
     if request.method == 'POST':
@@ -194,7 +194,10 @@ def workout_create(request: HttpRequest):
         if form.is_valid():
             workout = form.save()
             messages.success(request, 'Тренировка создана')
-            return redirect('workouts:edit', pk=workout.id)
+            if request.user.is_staff:
+                return redirect('workouts:edit', pk=workout.id)
+            else:
+                return redirect('workouts:list')
     else:
         form = WorkoutForm()
     return render(request, 'workouts/workout_edit.html', {
